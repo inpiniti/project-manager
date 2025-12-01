@@ -66,7 +66,7 @@ export function FormContainer() {
             <SheetContent className="sm:max-w-[600px] overflow-y-auto px-6">
                 <SheetHeader className="mb-6">
                     <SheetTitle>
-                        {formMode === 'create' ? '새 아이템 추가' : '아이템 수정'}
+                        {formMode === 'create' ? 'Add New Item' : 'Edit Item'}
                     </SheetTitle>
                 </SheetHeader>
 

@@ -23,7 +23,7 @@ export function ShareFormContainer() {
         <Sheet open={isShareFormOpen} onOpenChange={(open) => !open && closeShareForm()}>
             <SheetContent className="sm:max-w-[500px] px-6">
                 <SheetHeader className="mb-6">
-                    <SheetTitle>프로젝트 공유</SheetTitle>
+                    <SheetTitle>Share Project</SheetTitle>
                 </SheetHeader>
                 <ShareForm
                     project={project}

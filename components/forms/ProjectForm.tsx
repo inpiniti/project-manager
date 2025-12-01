@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 const projectSchema = z.object({
-    name: z.string().min(1, "프로젝트 이름을 입력해주세요"),
+    name: z.string().min(1, "Please enter a project name"),
     description: z.string().optional(),
 });
 
@@ -45,9 +45,9 @@ export function ProjectForm({ defaultValues, onSubmit, onCancel }: ProjectFormPr
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>프로젝트 이름</FormLabel>
+                            <FormLabel>Project Name</FormLabel>
                             <FormControl>
-                                <Input placeholder="나의 멋진 프로젝트" {...field} />
+                                <Input placeholder="My Awesome Project" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -59,11 +59,11 @@ export function ProjectForm({ defaultValues, onSubmit, onCancel }: ProjectFormPr
                     name="description"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>설명 (선택)</FormLabel>
+                            <FormLabel>Description (Optional)</FormLabel>
                             <FormControl>
                                 <Textarea
                                     className="min-h-[100px] resize-none"
-                                    placeholder="프로젝트에 대한 간단한 설명..."
+                                    placeholder="A brief description of the project..."
                                     {...field}
                                 />
                             </FormControl>
@@ -74,9 +74,9 @@ export function ProjectForm({ defaultValues, onSubmit, onCancel }: ProjectFormPr
 
                 <div className="flex justify-end gap-2 pt-4">
                     <Button type="button" variant="outline" onClick={onCancel}>
-                        취소
+                        Cancel
                     </Button>
-                    <Button type="submit">프로젝트 생성</Button>
+                    <Button type="submit">Create Project</Button>
                 </div>
             </form>
         </Form>

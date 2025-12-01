@@ -53,7 +53,7 @@ export function ShareForm({ project, onClose }: ShareFormProps) {
         if (!email) return;
 
         if (email === currentUser?.email) {
-            setError('본인은 초대할 수 없습니다.');
+            setError('You cannot invite yourself.');
             return;
         }
 
@@ -67,13 +67,13 @@ export function ShareForm({ project, onClose }: ShareFormProps) {
                 .single();
 
             if (searchError || !targetUser) {
-                setError('해당 이메일을 가진 사용자가 없습니다.');
+                setError('User with this email not found.');
                 setIsLoading(false);
                 return;
             }
 
             if (project.sharedWith?.includes(targetUser.id)) {
-                setError('이미 초대된 사용자입니다.');
+                setError('User already invited.');
                 setIsLoading(false);
                 return;
             }
@@ -84,13 +84,13 @@ export function ShareForm({ project, onClose }: ShareFormProps) {
             setError('');
         } catch (err) {
             console.error('Failed to invite user:', err);
-            setError('초대 중 오류가 발생했습니다.');
+            setError('Error occurred while inviting.');
         }
         setIsLoading(false);
     };
 
     const handleUnshare = async (userId: string) => {
-        if (confirm('이 사용자의 초대를 취소하시겠습니까?')) {
+        if (confirm('Are you sure you want to remove this user?')) {
             await unshareProject(project.id, userId);
             await loadSharedUsers(); // 목록 새로고침
         }
@@ -100,12 +100,12 @@ export function ShareForm({ project, onClose }: ShareFormProps) {
         <div className="space-y-6">
             <form onSubmit={handleInvite} className="space-y-4">
                 <div className="space-y-2">
-                    <Label htmlFor="invite-email">사용자 초대</Label>
+                    <Label htmlFor="invite-email">Invite User</Label>
                     <div className="flex gap-2">
                         <Input
                             id="invite-email"
                             type="email"
-                            placeholder="이메일 주소 입력"
+                            placeholder="Enter email address"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
@@ -118,11 +118,11 @@ export function ShareForm({ project, onClose }: ShareFormProps) {
             </form>
 
             <div className="space-y-2">
-                <Label>공유된 사용자 ({sharedUsers.length})</Label>
+                <Label>Shared Users ({sharedUsers.length})</Label>
                 <div className="border rounded-md divide-y max-h-[200px] overflow-y-auto">
                     {sharedUsers.length === 0 ? (
                         <div className="p-4 text-center text-sm text-muted-foreground">
-                            공유된 사용자가 없습니다.
+                            No users shared.
                         </div>
                     ) : (
                         sharedUsers.map((u) => (
@@ -152,7 +152,7 @@ export function ShareForm({ project, onClose }: ShareFormProps) {
 
             <div className="flex justify-end pt-2">
                 <Button variant="outline" onClick={onClose}>
-                    닫기
+                    Close
                 </Button>
             </div>
         </div>

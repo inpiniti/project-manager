@@ -43,9 +43,9 @@ export function CommonForm({ defaultValues, onSubmit, onCancel }: CommonFormProp
                         name="title"
                         render={({ field }) => (
                             <FormItem className="space-y-1">
-                                <FormLabel className="text-xs">제목</FormLabel>
+                                <FormLabel className="text-xs">Title</FormLabel>
                                 <FormControl>
-                                    <Input className="h-8 text-xs" placeholder="제목을 입력하세요" {...field} />
+                                    <Input className="h-8 text-xs" placeholder="Enter title" {...field} />
                                 </FormControl>
                                 <FormMessage className="text-[10px]" />
                             </FormItem>
@@ -57,11 +57,11 @@ export function CommonForm({ defaultValues, onSubmit, onCancel }: CommonFormProp
                         name="description"
                         render={({ field }) => (
                             <FormItem className="space-y-1">
-                                <FormLabel className="text-xs">설명</FormLabel>
+                                <FormLabel className="text-xs">Description</FormLabel>
                                 <FormControl>
                                     <Textarea
                                         className="min-h-[100px] text-xs resize-none"
-                                        placeholder="설명을 입력하세요"
+                                        placeholder="Enter description"
                                         {...field}
                                     />
                                 </FormControl>
@@ -75,9 +75,9 @@ export function CommonForm({ defaultValues, onSubmit, onCancel }: CommonFormProp
                         name="tags"
                         render={({ field }) => (
                             <FormItem className="space-y-1">
-                                <FormLabel className="text-xs">태그 (쉼표로 구분)</FormLabel>
+                                <FormLabel className="text-xs">Tags (comma separated)</FormLabel>
                                 <FormControl>
-                                    <Input className="h-8 text-xs" placeholder="태그1, 태그2" {...field} />
+                                    <Input className="h-8 text-xs" placeholder="tag1, tag2" {...field} />
                                 </FormControl>
                                 <FormMessage className="text-[10px]" />
                             </FormItem>
@@ -87,9 +87,9 @@ export function CommonForm({ defaultValues, onSubmit, onCancel }: CommonFormProp
 
                 <div className="flex justify-end gap-2 pt-2">
                     <Button type="button" variant="outline" onClick={onCancel} className="h-8 text-xs">
-                        취소
+                        Cancel
                     </Button>
-                    <Button type="submit" className="h-8 text-xs">저장</Button>
+                    <Button type="submit" className="h-8 text-xs">Save</Button>
                 </div>
             </form>
         </Form>

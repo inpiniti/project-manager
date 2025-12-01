@@ -38,14 +38,14 @@ export function ProjectDetail() {
         return (
             <div className="h-screen flex items-center justify-center">
                 <div className="text-center">
-                    <h2 className="text-2xl font-bold mb-2">프로젝트를 찾을 수 없습니다</h2>
+                    <h2 className="text-2xl font-bold mb-2">Project Not Found</h2>
                     <Button
                         onClick={() => {
                             setCurrentProjectId(null);
                             setCurrentView('projectList');
                         }}
                     >
-                        프로젝트 목록으로
+                        Back to Projects
                     </Button>
                 </div>
             </div>
@@ -69,7 +69,7 @@ export function ProjectDetail() {
                         className="gap-2"
                     >
                         <ArrowLeft className="h-4 w-4" />
-                        프로젝트 목록
+                        Projects
                     </Button>
                     <div className="h-4 w-px bg-border" />
                     <div>
