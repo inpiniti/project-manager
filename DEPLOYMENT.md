@@ -78,10 +78,19 @@ Vercel 대시보드에서:
 - `NEXT_PUBLIC_APP_URL`을 실제 배포된 URL로 업데이트
 
 ### 2. Supabase 설정 업데이트
+
+**중요:** 배포 후 반드시 Supabase 리다이렉트 URL을 업데이트해야 합니다!
+
 Supabase 대시보드에서:
-- Authentication → URL Configuration
-- Site URL: `https://your-app.vercel.app`
-- Redirect URLs: `https://your-app.vercel.app/**`
+- **Authentication** → **URL Configuration**
+- **Site URL**: `https://your-app.vercel.app` (실제 배포된 URL로 변경)
+- **Redirect URLs**에 추가:
+  ```
+  https://your-app.vercel.app/**
+  http://localhost:3000/**
+  ```
+
+**이 설정을 하지 않으면 로그인 후 localhost:3000으로 리다이렉트됩니다!**
 
 ### 3. 커스텀 도메인 연결 (선택사항)
 Vercel 대시보드에서:
