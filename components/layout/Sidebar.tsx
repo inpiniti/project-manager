@@ -50,7 +50,7 @@ export function Sidebar() {
                 <Separator className="w-12 mb-2" />
                 <button
                     className="w-14 h-14 rounded-lg flex items-center justify-center text-xl bg-secondary hover:bg-secondary/80 transition-all hover:scale-110"
-                    title="설정"
+                    title="Settings"
                 >
                     ⚙️
                 </button>

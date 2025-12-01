@@ -6,9 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { Loader2, AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export function LoginPage() {
-    const { login, signup } = useAuthStore();
+    const { login, signup, isLoggingIn, isSigningUp, error } = useAuthStore();
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
@@ -34,8 +36,8 @@ export function LoginPage() {
         <div className="h-screen flex items-center justify-center bg-muted/30">
             <Card className="w-[400px]">
                 <CardHeader className="text-center">
-                    <CardTitle className="text-2xl">프로젝트 매니저</CardTitle>
-                    <CardDescription>계정에 로그인하여 프로젝트를 관리하세요</CardDescription>
+                    <CardTitle className="text-2xl">Project Manager</CardTitle>
+                    <CardDescription>Log in to manage your projects</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="grid w-full grid-cols-2 mb-6 p-1 bg-muted rounded-lg">
@@ -43,20 +45,30 @@ export function LoginPage() {
                             className={`py-1.5 text-sm font-medium rounded-md transition-all ${isLogin ? 'bg-background shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
                             onClick={() => setIsLogin(true)}
                         >
-                            로그인
+                            Log In
                         </button>
                         <button
                             className={`py-1.5 text-sm font-medium rounded-md transition-all ${!isLogin ? 'bg-background shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
                             onClick={() => setIsLogin(false)}
                         >
-                            회원가입
+                            Sign Up
                         </button>
                     </div>
+
+                    {error && (
+                        <Alert variant="destructive" className="mb-4">
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertTitle>Error</AlertTitle>
+                            <AlertDescription>
+                                {error}
+                            </AlertDescription>
+                        </Alert>
+                    )}
 
                     {isLogin ? (
                         <form onSubmit={handleLogin} className="space-y-4">
                             <div className="space-y-2">
-                                <Label htmlFor="email">이메일</Label>
+                                <Label htmlFor="email">Email</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -65,12 +77,19 @@ export function LoginPage() {
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
-                            <Button type="submit" className="w-full">로그인</Button>
+                            <Button type="submit" className="w-full" disabled={isLoggingIn}>
+                                {isLoggingIn ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Logging in...
+                                    </>
+                                ) : 'Log In'}
+                            </Button>
                         </form>
                     ) : (
                         <form onSubmit={handleSignup} className="space-y-4">
                             <div className="space-y-2">
-                                <Label htmlFor="signup-email">이메일</Label>
+                                <Label htmlFor="signup-email">Email</Label>
                                 <Input
                                     id="signup-email"
                                     type="email"
@@ -80,21 +99,28 @@ export function LoginPage() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="signup-name">이름</Label>
+                                <Label htmlFor="signup-name">Name</Label>
                                 <Input
                                     id="signup-name"
                                     type="text"
-                                    placeholder="홍길동"
+                                    placeholder="John Doe"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                 />
                             </div>
-                            <Button type="submit" className="w-full">회원가입</Button>
+                            <Button type="submit" className="w-full" disabled={isSigningUp}>
+                                {isSigningUp ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Signing up...
+                                    </>
+                                ) : 'Sign Up'}
+                            </Button>
                         </form>
                     )}
                 </CardContent>
                 <CardFooter className="flex justify-center text-xs text-muted-foreground">
-                    {process.env.NEXT_PUBLIC_SUPABASE_URL ? 'Supabase 연동 모드' : 'Mock 모드 (Supabase 미설정)'}
+                    {process.env.NEXT_PUBLIC_SUPABASE_URL ? 'Supabase Mode' : 'Mock Mode (Supabase not configured)'}
                 </CardFooter>
             </Card>
         </div>

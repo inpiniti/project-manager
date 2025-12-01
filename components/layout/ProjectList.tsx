@@ -32,7 +32,7 @@ export function ProjectList() {
 
     const handleDeleteProject = (projectId: string, e: React.MouseEvent) => {
         e.stopPropagation();
-        if (confirm('정말 이 프로젝트를 삭제하시겠습니까?')) {
+        if (confirm('Are you sure you want to delete this project?')) {
             deleteProject(projectId);
         }
     };
@@ -48,20 +48,20 @@ export function ProjectList() {
             <div className="border-b p-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold mb-1">프로젝트 관리</h1>
+                        <h1 className="text-2xl font-bold mb-1">Project Management</h1>
                         <p className="text-sm text-muted-foreground">
-                            안녕하세요, {user.name}님! 프로젝트를 선택하거나 새로 만들어보세요
+                            Welcome, {user.name}! Select a project or create a new one
                         </p>
                     </div>
                     <div className="flex gap-2 items-center">
                         <ModeToggle />
                         <Button variant="outline" onClick={logout} className="gap-2">
                             <LogOut className="h-4 w-4" />
-                            로그아웃
+                            Log Out
                         </Button>
                         <Button onClick={handleCreateProject} className="gap-2">
                             <Plus className="h-4 w-4" />
-                            새 프로젝트
+                            New Project
                         </Button>
                     </div>
                 </div>
@@ -72,13 +72,13 @@ export function ProjectList() {
                 {projects.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full text-center">
                         <FolderOpen className="h-16 w-16 text-muted-foreground mb-4" />
-                        <h2 className="text-xl font-semibold mb-2">프로젝트가 없습니다</h2>
+                        <h2 className="text-xl font-semibold mb-2">No Projects Found</h2>
                         <p className="text-muted-foreground mb-4">
-                            새 프로젝트를 만들어 시작하세요
+                            Create a new project to get started
                         </p>
                         <Button onClick={handleCreateProject} className="gap-2">
                             <Plus className="h-4 w-4" />
-                            첫 프로젝트 만들기
+                            Create First Project
                         </Button>
                     </div>
                 ) : (
@@ -102,7 +102,7 @@ export function ProjectList() {
                                                         size="icon"
                                                         className="h-8 w-8"
                                                         onClick={(e) => handleShareProject(project.id, e)}
-                                                        title="초대하기"
+                                                        title="Invite"
                                                     >
                                                         <Share2 className="h-4 w-4 text-muted-foreground" />
                                                     </Button>
@@ -111,7 +111,7 @@ export function ProjectList() {
                                                         size="icon"
                                                         className="h-8 w-8"
                                                         onClick={(e) => handleDeleteProject(project.id, e)}
-                                                        title="삭제하기"
+                                                        title="Delete"
                                                     >
                                                         <Trash2 className="h-4 w-4 text-destructive" />
                                                     </Button>
@@ -122,7 +122,7 @@ export function ProjectList() {
 
                                     <h3 className="font-semibold text-lg mb-1 line-clamp-1">
                                         {project.name}
-                                        {!isOwner && <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-100">공유됨</span>}
+                                        {!isOwner && <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-100">Shared</span>}
                                     </h3>
 
                                     {project.description && (
@@ -134,7 +134,7 @@ export function ProjectList() {
                                     <div className="flex items-center justify-between mt-auto">
                                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
                                             <Calendar className="h-3 w-3" />
-                                            {new Date(project.createdAt).toLocaleDateString('ko-KR')}
+                                            {new Date(project.createdAt).toLocaleDateString('en-US')}
                                         </div>
                                         {!isOwner && (
                                             <span className="text-xs text-muted-foreground">

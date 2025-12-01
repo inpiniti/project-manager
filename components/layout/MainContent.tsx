@@ -26,9 +26,9 @@ export function MainContent() {
             <div className="flex-1 flex items-center justify-center bg-background">
                 <div className="text-center p-8">
                     <FolderOpen className="h-16 w-16 mx-auto mb-4 text-muted-foreground/40" />
-                    <h2 className="text-xl font-semibold mb-2 text-foreground">프로젝트 관리 시스템</h2>
+                    <h2 className="text-xl font-semibold mb-2 text-foreground">Project Management System</h2>
                     <p className="text-sm text-muted-foreground">
-                        좌측에서 카테고리를 선택하여 시작하세요
+                        Select a category from the sidebar to get started
                     </p>
                 </div>
             </div>
@@ -45,7 +45,7 @@ export function MainContent() {
                     </div>
                     <h2 className="text-xl font-semibold mb-2 text-foreground">{categoryInfo.name}</h2>
                     <p className="text-sm text-muted-foreground">
-                        목록에서 아이템을 선택하거나 새로 만들어보세요
+                        Select an item from the list or create a new one
                     </p>
                 </div>
             </div>
@@ -59,9 +59,9 @@ export function MainContent() {
             <div className="flex-1 flex items-center justify-center bg-background">
                 <div className="text-center">
                     <p className="text-6xl mb-4">❌</p>
-                    <h2 className="text-2xl font-bold mb-2">아이템을 찾을 수 없습니다</h2>
+                    <h2 className="text-2xl font-bold mb-2">Item Not Found</h2>
                     <p className="text-muted-foreground">
-                        다른 아이템을 선택해주세요
+                        Please select another item
                     </p>
                 </div>
             </div>
@@ -75,14 +75,14 @@ export function MainContent() {
     };
 
     const handleDelete = () => {
-        if (confirm('정말 삭제하시겠습니까?')) {
+        if (confirm('Are you sure you want to delete this?')) {
             deleteItem(selectedItemId);
         }
     };
 
     return (
         <div className="h-full flex flex-col bg-background">
-            {/* 헤더 */}
+            {/* Header */}
             <div className="border-b p-4 flex-shrink-0">
                 <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -106,34 +106,34 @@ export function MainContent() {
                     <div className="flex gap-2">
                         <Button variant="outline" size="sm" onClick={handleEdit} className="h-7 text-xs px-2">
                             <Edit className="h-3 w-3 mr-1" />
-                            수정
+                            Edit
                         </Button>
                         <Button variant="destructive" size="sm" onClick={handleDelete} className="h-7 text-xs px-2">
                             <Trash2 className="h-3 w-3 mr-1" />
-                            삭제
+                            Delete
                         </Button>
                     </div>
                 </div>
             </div>
 
-            {/* 내용 */}
+            {/* Content */}
             <div className="flex-1 overflow-y-auto min-h-0">
                 <div className="p-4">
-                    {/* 공통 정보 섹션 */}
+                    {/* Common Info Section */}
                     <section className="mb-6">
-                        <h2 className="text-sm font-semibold mb-3">기본 정보</h2>
+                        <h2 className="text-sm font-semibold mb-3">Basic Info</h2>
                         <div className="grid grid-cols-2 gap-4">
-                            <InfoItem label="생성일" value={new Date(item.createdAt).toLocaleString('ko-KR')} />
-                            <InfoItem label="수정일" value={new Date(item.updatedAt).toLocaleString('ko-KR')} />
-                            {item.createdBy && <InfoItem label="작성자" value={item.createdBy} />}
+                            <InfoItem label="Created At" value={new Date(item.createdAt).toLocaleString('en-US')} />
+                            <InfoItem label="Updated At" value={new Date(item.updatedAt).toLocaleString('en-US')} />
+                            {item.createdBy && <InfoItem label="Created By" value={item.createdBy} />}
                         </div>
                     </section>
 
                     <Separator className="my-4" />
 
-                    {/* 카테고리별 특화 정보 */}
+                    {/* Category Specific Info */}
                     <section className="mb-6">
-                        <h2 className="text-sm font-semibold mb-3">상세 정보</h2>
+                        <h2 className="text-sm font-semibold mb-3">Details</h2>
                         <div className="bg-muted/30 rounded-md p-4">
                             <pre className="text-xs overflow-auto font-mono">
                                 {JSON.stringify(item, null, 2)}
@@ -143,9 +143,9 @@ export function MainContent() {
 
                     <Separator className="my-4" />
 
-                    {/* 변수 섹션 */}
+                    {/* Variables Section */}
                     <DetailSection
-                        title="변수 (Variables)"
+                        title="Variables"
                         items={getVariablesByItemId(selectedItemId)}
                         onAdd={() => openDetailForm('variable', 'create')}
                         onDelete={deleteVariable}
@@ -154,9 +154,9 @@ export function MainContent() {
 
                     <Separator className="my-4" />
 
-                    {/* 함수 섹션 */}
+                    {/* Functions Section */}
                     <DetailSection
-                        title="함수 (Functions)"
+                        title="Functions"
                         items={getFunctionsByItemId(selectedItemId)}
                         onAdd={() => openDetailForm('function', 'create')}
                         onDelete={deleteFunction}
@@ -165,9 +165,9 @@ export function MainContent() {
 
                     <Separator className="my-4" />
 
-                    {/* 객체 섹션 */}
+                    {/* Objects Section */}
                     <DetailSection
-                        title="객체 (Objects)"
+                        title="Objects"
                         items={getObjectsByItemId(selectedItemId)}
                         onAdd={() => openDetailForm('object', 'create')}
                         onDelete={deleteObject}
@@ -219,12 +219,12 @@ function DetailSection<T extends { id: string; name: string; description?: strin
                     className="h-6 text-xs px-2"
                 >
                     <Plus className="h-3 w-3 mr-1" />
-                    추가
+                    Add
                 </Button>
             </div>
             {items.length === 0 ? (
                 <div className="text-xs text-muted-foreground text-center py-4 bg-muted/20 rounded-md">
-                    항목이 없습니다
+                    No items found
                 </div>
             ) : (
                 <div className="space-y-1">
@@ -245,7 +245,7 @@ function DetailSection<T extends { id: string; name: string; description?: strin
                                 size="sm"
                                 variant="ghost"
                                 onClick={() => {
-                                    if (confirm('정말 삭제하시겠습니까?')) {
+                                    if (confirm('Are you sure you want to delete this?')) {
                                         onDelete(item.id);
                                     }
                                 }}

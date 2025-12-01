@@ -6,6 +6,9 @@ interface AuthStore {
     user: User | null;
     isAuthenticated: boolean;
     isLoading: boolean;
+    isLoggingIn: boolean;
+    isSigningUp: boolean;
+    error: string | null;
 
     // Actions
     login: (email: string) => Promise<boolean>;
@@ -18,19 +21,22 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     user: null,
     isAuthenticated: false,
     isLoading: true,
+    isLoggingIn: false,
+    isSigningUp: false,
+    error: null,
 
     checkSession: async () => {
         try {
             const { data: { session } } = await supabase.auth.getSession();
             if (session?.user) {
-                // 프로필 정보 가져오기
+                // Get profile info
                 let { data: profile, error: profileError } = await supabase
                     .from('profiles')
                     .select('*')
                     .eq('id', session.user.id)
                     .single();
 
-                // 프로필이 없으면 생성
+                // Create profile if not exists
                 if (profileError && profileError.code === 'PGRST116') {
                     const { data: newProfile, error: insertError } = await supabase
                         .from('profiles')
@@ -65,27 +71,28 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
             }
         } catch (error) {
             console.error('Session check failed:', error);
-            // 환경 변수가 없거나 에러 발생 시 로컬 스토리지 폴백 (기존 로직 유지 가능하지만 여기서는 초기화)
             set({ user: null, isAuthenticated: false, isLoading: false });
         }
     },
 
     login: async (email) => {
+        set({ isLoggingIn: true, error: null });
         try {
-            // Magic Link 로그인
+            // Magic Link Login
             const { error } = await supabase.auth.signInWithOtp({
                 email,
                 options: {
-                    shouldCreateUser: false, // 회원가입이 아니면 false
+                    shouldCreateUser: false,
                 }
             });
 
             if (error) throw error;
-            alert('이메일로 로그인 링크가 전송되었습니다. 확인해주세요.');
+            alert('A login link has been sent to your email. Please check your inbox.');
             return true;
-        } catch (error) {
+        } catch (error: any) {
             console.error('Login failed:', error);
-            // Mock 로그인 (Supabase 설정 없을 때 테스트용)
+
+            // Mock Login
             if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
                 console.warn('Supabase not configured. Using mock login.');
                 const mockUser: User = {
@@ -95,15 +102,22 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
                     createdAt: new Date(),
                 };
                 set({ user: mockUser, isAuthenticated: true });
+                alert('Logged in with a test account because Supabase is not configured.');
                 return true;
             }
+
+            const errorMessage = error.message || 'An unknown error occurred.';
+            set({ error: errorMessage });
             return false;
+        } finally {
+            set({ isLoggingIn: false });
         }
     },
 
     signup: async (email, name) => {
+        set({ isSigningUp: true, error: null });
         try {
-            // 회원가입 (메타데이터에 이름 저장)
+            // Signup
             const { error } = await supabase.auth.signInWithOtp({
                 email,
                 options: {
@@ -112,11 +126,12 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
             });
 
             if (error) throw error;
-            alert('이메일로 가입 링크가 전송되었습니다. 확인해주세요.');
+            alert('A signup link has been sent to your email. Please check your inbox.');
             return true;
-        } catch (error) {
+        } catch (error: any) {
             console.error('Signup failed:', error);
-            // Mock 회원가입
+
+            // Mock Signup
             if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
                 console.warn('Supabase not configured. Using mock signup.');
                 const mockUser: User = {
@@ -126,9 +141,15 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
                     createdAt: new Date(),
                 };
                 set({ user: mockUser, isAuthenticated: true });
+                alert('Signed up with a test account because Supabase is not configured.');
                 return true;
             }
+
+            const errorMessage = error.message || 'An unknown error occurred.';
+            set({ error: errorMessage });
             return false;
+        } finally {
+            set({ isSigningUp: false });
         }
     },
 

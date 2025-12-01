@@ -14,7 +14,7 @@ import {
 export const CATEGORIES: CategoryInfo[] = [
     {
         id: 'screen',
-        name: '화면',
+        name: 'Screen',
         icon: <Monitor className="h-full w-full" />,
         color: 'blue',
     },

@@ -19,7 +19,7 @@ export function ListPanel() {
             <div className="h-full w-full flex items-center justify-center bg-background">
                 <div className="text-center p-8">
                     <ChevronRight className="h-12 w-12 mx-auto mb-3 text-muted-foreground/40" />
-                    <p className="text-sm text-muted-foreground">카테고리를 선택하세요</p>
+                    <p className="text-sm text-muted-foreground">Select a category</p>
                 </div>
             </div>
         );
@@ -62,7 +62,7 @@ export function ListPanel() {
                     <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
                     <input
                         type="text"
-                        placeholder="검색..."
+                        placeholder="Search..."
                         className="w-full pl-7 pr-2 py-1 text-xs border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring"
                     />
                 </div>
@@ -73,7 +73,7 @@ export function ListPanel() {
                 {items.length === 0 ? (
                     <div className="p-8 text-center">
                         <FileText className="h-12 w-12 mx-auto mb-3 text-muted-foreground/40" />
-                        <p className="text-xs text-muted-foreground">아이템이 없습니다</p>
+                        <p className="text-xs text-muted-foreground">No items found</p>
                     </div>
                 ) : (
                     <div className="p-1">
@@ -133,7 +133,7 @@ function ItemCard({ item, isSelected, onClick }: ItemCardProps) {
 
             {/* 메타 정보 */}
             <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                <span>{new Date(item.createdAt).toLocaleDateString('ko-KR')}</span>
+                <span>{new Date(item.createdAt).toLocaleDateString('en-US')}</span>
                 {item.createdBy && <span>{item.createdBy}</span>}
             </div>
         </div>
