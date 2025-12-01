@@ -27,14 +27,14 @@ export function ScreenForm({ defaultValues, onSubmit, onCancel }: ScreenFormProp
     const form = useForm<ScreenFormValues>({
         resolver: zodResolver(screenFormSchema),
         defaultValues: {
-            title: defaultValues?.title || "",
-            description: defaultValues?.description || "",
-            tags: defaultValues?.tags || "",
-            path: defaultValues?.path || "",
-            componentName: defaultValues?.componentName || "",
-            variables: defaultValues?.variables || [],
-            functions: defaultValues?.functions || [],
-            dependencies: defaultValues?.dependencies || "",
+            title: defaultValues?.title ?? "",
+            description: defaultValues?.description ?? "",
+            tags: defaultValues?.tags ?? "",
+            path: defaultValues?.path ?? "",
+            componentName: defaultValues?.componentName ?? "",
+            variables: defaultValues?.variables ?? [],
+            functions: defaultValues?.functions ?? [],
+            dependencies: defaultValues?.dependencies ?? "",
         },
     });
 

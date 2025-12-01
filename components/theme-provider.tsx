@@ -63,7 +63,7 @@ export function ThemeProvider({
     };
 
     return (
-        <ThemeProviderContext.Provider value={value} {...{ value }}>
+        <ThemeProviderContext.Provider value={value}>
             {children}
         </ThemeProviderContext.Provider>
     );

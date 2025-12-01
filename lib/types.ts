@@ -63,6 +63,7 @@ export interface ProjectItem {
   details?: Record<string, any>; // JSONB 필드 (유연한 상세 정보)
   createdAt: Date;
   updatedAt: Date;
+  createdBy?: string;
 }
 
 // 기존 AnyItem 타입을 ProjectItem으로 대체
