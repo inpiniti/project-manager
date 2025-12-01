@@ -7,26 +7,29 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Plus, Search } from 'lucide-react';
+import { Plus, Search, ChevronRight, FileText } from 'lucide-react';
 import { AnyItem } from '@/lib/types';
 
 export function ListPanel() {
-    const { selectedCategory, selectedItemId, setSelectedItemId, openForm } = useUiStore();
+    const { selectedCategory, selectedItemId, currentProjectId, setSelectedItemId, openForm } = useUiStore();
     const { getItemsByCategory } = useItemStore();
 
-    if (!selectedCategory) {
+    if (!selectedCategory || !currentProjectId) {
         return (
-            <div className="w-80 border-r bg-background flex items-center justify-center text-muted-foreground">
+            <div className="h-full w-full flex items-center justify-center bg-background">
                 <div className="text-center p-8">
-                    <p className="text-lg">👈</p>
-                    <p className="mt-2">카테고리를 선택하세요</p>
+                    <ChevronRight className="h-12 w-12 mx-auto mb-3 text-muted-foreground/40" />
+                    <p className="text-sm text-muted-foreground">카테고리를 선택하세요</p>
                 </div>
             </div>
         );
     }
 
     const categoryInfo = getCategoryInfo(selectedCategory);
-    const items = getItemsByCategory(selectedCategory);
+    const items = getItemsByCategory(selectedCategory, currentProjectId);
+
+    console.log('ListPanel - Category:', selectedCategory, 'ProjectId:', currentProjectId);
+    console.log('ListPanel - Items:', items);
 
     const handleItemClick = (itemId: string) => {
         setSelectedItemId(itemId);
@@ -37,30 +40,30 @@ export function ListPanel() {
     };
 
     return (
-        <div className="w-80 border-r bg-background flex flex-col">
+        <div className="h-full w-full flex flex-col bg-background">
             {/* 헤더 */}
-            <div className="p-4 border-b">
-                <div className="flex items-center justify-between mb-3">
+            <div className="p-2 border-b">
+                <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                        <span className="text-2xl">{categoryInfo.icon}</span>
-                        <h2 className="text-xl font-bold">{categoryInfo.name}</h2>
+                        <span className="text-lg">{categoryInfo.icon}</span>
+                        <h2 className="text-sm font-semibold">{categoryInfo.name}</h2>
                     </div>
                     <Button
                         size="sm"
                         onClick={handleNewItem}
-                        className="h-8 w-8 p-0"
+                        className="h-6 w-6 p-0"
                     >
-                        <Plus className="h-4 w-4" />
+                        <Plus className="h-3 w-3" />
                     </Button>
                 </div>
 
                 {/* 검색바 */}
                 <div className="relative">
-                    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
                     <input
                         type="text"
                         placeholder="검색..."
-                        className="w-full pl-8 pr-3 py-2 text-sm border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+                        className="w-full pl-7 pr-2 py-1 text-xs border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring"
                     />
                 </div>
             </div>
@@ -68,13 +71,12 @@ export function ListPanel() {
             {/* 아이템 목록 */}
             <ScrollArea className="flex-1">
                 {items.length === 0 ? (
-                    <div className="p-8 text-center text-muted-foreground">
-                        <p className="text-4xl mb-2">📝</p>
-                        <p className="text-sm">아이템이 없습니다</p>
-                        <p className="text-xs mt-1">+ 버튼을 눌러 추가하세요</p>
+                    <div className="p-8 text-center">
+                        <FileText className="h-12 w-12 mx-auto mb-3 text-muted-foreground/40" />
+                        <p className="text-xs text-muted-foreground">아이템이 없습니다</p>
                     </div>
                 ) : (
-                    <div className="p-2">
+                    <div className="p-1">
                         {items.map((item) => (
                             <ItemCard
                                 key={item.id}
@@ -103,37 +105,36 @@ function ItemCard({ item, isSelected, onClick }: ItemCardProps) {
         <div
             onClick={onClick}
             className={cn(
-                "p-3 mb-2 rounded-lg border cursor-pointer transition-all hover:shadow-md",
+                "p-2 mb-1 rounded-md border cursor-pointer transition-all hover:shadow-sm",
                 isSelected
                     ? "bg-primary/10 border-primary shadow-sm"
                     : "bg-card hover:bg-accent"
             )}
         >
             {/* 카테고리 뱃지 */}
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-1 mb-1">
                 <Badge
                     variant="secondary"
-                    className="text-xs"
-                    style={{ backgroundColor: `${categoryInfo.color}20`, color: categoryInfo.color }}
+                    className="text-[10px] px-1 py-0 h-4 font-normal"
                 >
-                    {categoryInfo.icon} {categoryInfo.name}
+                    {categoryInfo.icon} <span className="ml-1">{categoryInfo.name}</span>
                 </Badge>
             </div>
 
             {/* 제목 */}
-            <h3 className="font-semibold text-sm mb-1 line-clamp-1">
+            <h3 className="font-medium text-xs mb-0.5 line-clamp-1">
                 {item.title}
             </h3>
 
             {/* 설명 */}
-            <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
+            <p className="text-[10px] text-muted-foreground line-clamp-2 mb-1">
                 {item.description}
             </p>
 
             {/* 메타 정보 */}
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span>📅 {new Date(item.createdAt).toLocaleDateString('ko-KR')}</span>
-                {item.createdBy && <span>👤 {item.createdBy}</span>}
+            <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                <span>{new Date(item.createdAt).toLocaleDateString('ko-KR')}</span>
+                {item.createdBy && <span>{item.createdBy}</span>}
             </div>
         </div>
     );

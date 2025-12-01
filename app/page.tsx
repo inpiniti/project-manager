@@ -1,13 +1,44 @@
-import { Sidebar } from "@/components/layout/Sidebar";
-import { ListPanel } from "@/components/layout/ListPanel";
-import { MainContent } from "@/components/layout/MainContent";
+'use client';
+
+import { useEffect, useState } from "react";
+import { useUiStore } from "@/store/uiStore";
+import { useAuthStore } from "@/store/authStore";
+import { ProjectList } from "@/components/layout/ProjectList";
+import { ProjectDetail } from "@/components/layout/ProjectDetail";
+import { FormContainer } from "@/components/layout/FormContainer";
+import { DetailFormContainer } from "@/components/layout/DetailFormContainer";
+import { ProjectFormContainer } from "@/components/layout/ProjectFormContainer";
+import { ShareFormContainer } from "@/components/layout/ShareFormContainer";
+import { LoginPage } from "@/components/auth/LoginPage";
 
 export default function Home() {
+  const { currentView } = useUiStore();
+  const { isAuthenticated, isLoading, checkSession } = useAuthStore();
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+    checkSession(); // Supabase 세션 체크
+  }, [checkSession]);
+
+  if (!isHydrated || isLoading) {
+    return null; // 또는 로딩 스피너
+  }
+
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
+
   return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar />
-      <ListPanel />
-      <MainContent />
-    </div>
+    <>
+      {currentView === 'projectList' && <ProjectList />}
+      {currentView === 'projectDetail' && <ProjectDetail />}
+
+      {/* 전역 폼 컨테이너 */}
+      <FormContainer />
+      <DetailFormContainer />
+      <ProjectFormContainer />
+      <ShareFormContainer />
+    </>
   );
 }

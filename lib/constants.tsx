@@ -1,58 +1,67 @@
+import { ReactNode } from 'react';
 import { CategoryType, CategoryInfo } from './types';
+import {
+    Monitor,
+    Plug,
+    Database,
+    FileCode,
+    Webhook,
+    Search,
+    Package,
+    Wrench,
+} from "lucide-react";
 
-// 카테고리 정보
 export const CATEGORIES: CategoryInfo[] = [
     {
         id: 'screen',
         name: '화면',
-        icon: '🖥️',
-        color: '#3b82f6', // Blue
+        icon: <Monitor className="h-full w-full" />,
+        color: 'blue',
     },
     {
         id: 'api',
         name: 'API',
-        icon: '🔌',
-        color: '#10b981', // Green
+        icon: <Plug className="h-full w-full" />,
+        color: 'green',
     },
     {
         id: 'db',
-        name: 'DB',
-        icon: '🗄️',
-        color: '#f59e0b', // Amber
+        name: 'Database',
+        icon: <Database className="h-full w-full" />,
+        color: 'purple',
     },
     {
         id: 'sql',
         name: 'SQL',
-        icon: '📊',
-        color: '#8b5cf6', // Purple
+        icon: <FileCode className="h-full w-full" />,
+        color: 'orange',
     },
     {
         id: 'hook',
         name: 'Hook',
-        icon: '🪝',
-        color: '#ec4899', // Pink
+        icon: <Webhook className="h-full w-full" />,
+        color: 'pink',
     },
     {
         id: 'query',
         name: 'Query',
-        icon: '🔍',
-        color: '#06b6d4', // Cyan
+        icon: <Search className="h-full w-full" />,
+        color: 'cyan',
     },
     {
         id: 'store',
         name: 'Store',
-        icon: '💾',
-        color: '#f97316', // Orange
+        icon: <Package className="h-full w-full" />,
+        color: 'indigo',
     },
     {
         id: 'util',
-        name: 'Util',
-        icon: '🛠️',
-        color: '#6366f1', // Indigo
+        name: 'Utility',
+        icon: <Wrench className="h-full w-full" />,
+        color: 'yellow',
     },
 ];
 
-// 카테고리 ID로 정보 가져오기
 export const getCategoryInfo = (categoryId: CategoryType): CategoryInfo => {
     const category = CATEGORIES.find((cat) => cat.id === categoryId);
     if (!category) {
@@ -61,12 +70,10 @@ export const getCategoryInfo = (categoryId: CategoryType): CategoryInfo => {
     return category;
 };
 
-// 카테고리 색상 가져오기
 export const getCategoryColor = (categoryId: CategoryType): string => {
     return getCategoryInfo(categoryId).color;
 };
 
-// 카테고리 아이콘 가져오기
-export const getCategoryIcon = (categoryId: CategoryType): string => {
+export const getCategoryIcon = (categoryId: CategoryType): ReactNode => {
     return getCategoryInfo(categoryId).icon;
 };
