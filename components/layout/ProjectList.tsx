@@ -13,13 +13,11 @@ export function ProjectList() {
     const { setCurrentView, setCurrentProjectId, openProjectForm, openShareForm } = useUiStore();
     const { user, logout } = useAuthStore();
 
-    if (!user) return null;
-
-    const projects = getProjectsByUserId(user.id);
-
     useEffect(() => {
-        fetchProjects(user.id);
-    }, [user.id, fetchProjects]);
+        if (user) {
+            fetchProjects(user.id);
+        }
+    }, [user, fetchProjects]);
 
     const handleCreateProject = () => {
         openProjectForm();
@@ -41,6 +39,37 @@ export function ProjectList() {
         e.stopPropagation();
         openShareForm(projectId);
     };
+
+    // 비로그인 상태 UI
+    if (!user) {
+        return (
+            <div className="h-screen flex flex-col bg-background">
+                <div className="border-b p-6 flex justify-between items-center">
+                    <h1 className="text-2xl font-bold">Project Manager</h1>
+                    <div className="flex gap-2 items-center">
+                        <ModeToggle />
+                        <Button onClick={() => setCurrentView('login')}>Log In</Button>
+                    </div>
+                </div>
+                <div className="flex-1 flex flex-col items-center justify-center text-center p-8 animate-in fade-in zoom-in duration-500">
+                    <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+                        Build in a weekend<br />Scale to millions
+                    </h2>
+                    <p className="text-xl text-muted-foreground max-w-2xl mb-8 leading-relaxed">
+                        Supabase is the Postgres development platform.<br />
+                        Start your project with a Postgres database, Authentication, instant APIs, Edge Functions, Realtime subscriptions, Storage, and Vector embeddings.
+                    </p>
+                    <div className="flex gap-4">
+                        <Button size="lg" onClick={() => setCurrentView('login')} className="text-lg px-8 py-6">
+                            Start your project
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    const projects = getProjectsByUserId(user.id);
 
     return (
         <div className="h-screen flex flex-col bg-background">
@@ -71,14 +100,14 @@ export function ProjectList() {
             <div className="flex-1 overflow-y-auto p-6">
                 {projects.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full text-center">
-                        <FolderOpen className="h-16 w-16 text-muted-foreground mb-4" />
-                        <h2 className="text-xl font-semibold mb-2">No Projects Found</h2>
-                        <p className="text-muted-foreground mb-4">
-                            Create a new project to get started
+                        <FolderOpen className="h-20 w-20 text-muted-foreground/50 mb-6" />
+                        <h2 className="text-3xl font-bold mb-4">Start your first project</h2>
+                        <p className="text-muted-foreground mb-8 max-w-md text-lg">
+                            Create a new project to start managing your screens, APIs, databases, and more in one place.
                         </p>
-                        <Button onClick={handleCreateProject} className="gap-2">
-                            <Plus className="h-4 w-4" />
-                            Create First Project
+                        <Button size="lg" onClick={handleCreateProject} className="gap-2 text-lg px-8">
+                            <Plus className="h-5 w-5" />
+                            Create New Project
                         </Button>
                     </div>
                 ) : (
@@ -90,7 +119,7 @@ export function ProjectList() {
                                 <div
                                     key={project.id}
                                     onClick={() => handleOpenProject(project.id)}
-                                    className="group relative border rounded-lg p-4 hover:shadow-lg transition-all cursor-pointer bg-card hover:border-primary flex flex-col"
+                                    className="group relative border rounded-lg p-4 hover:shadow-lg transition-all cursor-pointer bg-card hover:border-primary flex flex-col h-[200px]"
                                 >
                                     <div className="flex items-start justify-between mb-3">
                                         <FolderOpen className={`h-8 w-8 ${isOwner ? 'text-primary' : 'text-blue-500'}`} />
@@ -120,18 +149,18 @@ export function ProjectList() {
                                         </div>
                                     </div>
 
-                                    <h3 className="font-semibold text-lg mb-1 line-clamp-1">
+                                    <h3 className="font-semibold text-lg mb-2 line-clamp-1">
                                         {project.name}
                                         {!isOwner && <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-100">Shared</span>}
                                     </h3>
 
                                     {project.description && (
-                                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2 flex-1">
                                             {project.description}
                                         </p>
                                     )}
 
-                                    <div className="flex items-center justify-between mt-auto">
+                                    <div className="flex items-center justify-between mt-auto pt-2 border-t">
                                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
                                             <Calendar className="h-3 w-3" />
                                             {new Date(project.createdAt).toLocaleDateString('en-US')}

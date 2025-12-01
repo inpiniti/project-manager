@@ -25,12 +25,9 @@ export default function Home() {
     return null; // 또는 로딩 스피너
   }
 
-  if (!isAuthenticated) {
-    return <LoginPage />;
-  }
-
   return (
     <>
+      {currentView === 'login' && <LoginPage />}
       {currentView === 'projectList' && <ProjectList />}
       {currentView === 'projectDetail' && <ProjectDetail />}
 
