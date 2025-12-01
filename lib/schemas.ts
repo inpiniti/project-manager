@@ -25,8 +25,8 @@ export const functionSchema = z.object({
 export const screenFormSchema = baseItemSchema.extend({
     path: z.string().min(1, "경로를 입력해주세요"),
     componentName: z.string().min(1, "컴포넌트명을 입력해주세요"),
-    variables: z.array(variableSchema).optional().default([]),
-    functions: z.array(functionSchema).optional().default([]),
+    variables: z.array(variableSchema).default([]),
+    functions: z.array(functionSchema).default([]),
     dependencies: z.string().optional(), // 쉼표로 구분
 });
 
