@@ -80,7 +80,11 @@ export function FunctionForm({ defaultValues, onSubmit, onCancel }: FunctionForm
                             <FormItem className="space-y-1">
                                 <FormLabel className="text-xs">파라미터 (선택)</FormLabel>
                                 <FormControl>
-                                    <Input className="h-8 text-xs" placeholder="event: MouseEvent" {...field} />
+                                    <Textarea
+                                        className="min-h-[60px] text-xs resize-none"
+                                        placeholder="event: MouseEvent&#10;userId: string"
+                                        {...field}
+                                    />
                                 </FormControl>
                                 <FormMessage className="text-[10px]" />
                             </FormItem>

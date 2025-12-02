@@ -528,8 +528,7 @@ interface UiStore {
 --query: #06b6d4;     /* Cyan */
 --store: #f97316;     /* Orange */
 --util: #6366f1;      /* Indigo */
-```
-
+`
 ### 타이포그래피
 - **제목**: `font-bold text-2xl`
 - **부제목**: `font-semibold text-lg`

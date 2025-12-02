@@ -7,10 +7,11 @@ import { getCategoryInfo } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Edit, Trash2, Plus, FolderOpen, Layers } from 'lucide-react';
+import { Edit, Trash2, Plus, FolderOpen, Layers, Download } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function MainContent() {
-    const { selectedCategory, selectedItemId, openForm, openDetailForm } = useUiStore();
+    const { selectedCategory, selectedItemId, openForm, openDetailForm, openImportDialog } = useUiStore();
     const { getItemById, deleteItem } = useItemStore();
     const {
         getVariablesByItemId,
@@ -19,6 +20,8 @@ export function MainContent() {
         deleteVariable,
         deleteFunction,
         deleteObject,
+        getEffectsByItemId,
+        deleteEffect,
     } = useDetailStore();
 
     if (!selectedCategory) {
@@ -131,48 +134,85 @@ export function MainContent() {
 
                     <Separator className="my-4" />
 
-                    {/* Category Specific Info */}
-                    <section className="mb-6">
-                        <h2 className="text-sm font-semibold mb-3">Details</h2>
-                        <div className="bg-muted/30 rounded-md p-4">
-                            <pre className="text-xs overflow-auto font-mono">
-                                {JSON.stringify(item, null, 2)}
-                            </pre>
-                        </div>
-                    </section>
 
-                    <Separator className="my-4" />
 
-                    {/* Variables Section */}
-                    <DetailSection
-                        title="Variables"
-                        items={getVariablesByItemId(selectedItemId)}
-                        onAdd={() => openDetailForm('variable', 'create')}
-                        onDelete={deleteVariable}
-                        renderItem={(v) => `${v.name}: ${v.type}${v.defaultValue ? ` = ${v.defaultValue}` : ''}`}
-                    />
+                    {/* Resource Tabs */}
+                    <Tabs defaultValue="variable" className="w-full">
+                        <TabsList className="grid w-full grid-cols-4 mb-4">
+                            <TabsTrigger value="variable" className="flex items-center gap-2">
+                                Variables
+                                <Badge variant="secondary" className="px-1.5 py-0 h-5 text-[10px] min-w-[20px] justify-center">
+                                    {getVariablesByItemId(selectedItemId).length}
+                                </Badge>
+                            </TabsTrigger>
+                            <TabsTrigger value="function" className="flex items-center gap-2">
+                                Functions
+                                <Badge variant="secondary" className="px-1.5 py-0 h-5 text-[10px] min-w-[20px] justify-center">
+                                    {getFunctionsByItemId(selectedItemId).length}
+                                </Badge>
+                            </TabsTrigger>
+                            <TabsTrigger value="object" className="flex items-center gap-2">
+                                Objects
+                                <Badge variant="secondary" className="px-1.5 py-0 h-5 text-[10px] min-w-[20px] justify-center">
+                                    {getObjectsByItemId(selectedItemId).length}
+                                </Badge>
+                            </TabsTrigger>
+                            <TabsTrigger value="effect" className="flex items-center gap-2">
+                                useEffect
+                                <Badge variant="secondary" className="px-1.5 py-0 h-5 text-[10px] min-w-[20px] justify-center">
+                                    {getEffectsByItemId(selectedItemId).length}
+                                </Badge>
+                            </TabsTrigger>
+                        </TabsList>
 
-                    <Separator className="my-4" />
+                        <TabsContent value="variable" className="mt-0">
+                            <DetailSection
+                                title=""
+                                items={getVariablesByItemId(selectedItemId)}
+                                onAdd={() => openDetailForm('variable', 'create')}
+                                onImport={() => openImportDialog('variable')}
+                                onEdit={(id) => openDetailForm('variable', 'edit', id)}
+                                onDelete={deleteVariable}
+                                renderItem={(v) => `${v.name}: ${v.type}${v.defaultValue ? ` = ${v.defaultValue}` : ''}`}
+                            />
+                        </TabsContent>
 
-                    {/* Functions Section */}
-                    <DetailSection
-                        title="Functions"
-                        items={getFunctionsByItemId(selectedItemId)}
-                        onAdd={() => openDetailForm('function', 'create')}
-                        onDelete={deleteFunction}
-                        renderItem={(f) => `${f.name}(): ${f.returnType}`}
-                    />
+                        <TabsContent value="function" className="mt-0">
+                            <DetailSection
+                                title=""
+                                items={getFunctionsByItemId(selectedItemId)}
+                                onAdd={() => openDetailForm('function', 'create')}
+                                onImport={() => openImportDialog('function')}
+                                onEdit={(id) => openDetailForm('function', 'edit', id)}
+                                onDelete={deleteFunction}
+                                renderItem={(f) => `${f.name}(): ${f.returnType}`}
+                            />
+                        </TabsContent>
 
-                    <Separator className="my-4" />
+                        <TabsContent value="object" className="mt-0">
+                            <DetailSection
+                                title=""
+                                items={getObjectsByItemId(selectedItemId)}
+                                onAdd={() => openDetailForm('object', 'create')}
+                                onImport={() => openImportDialog('object')}
+                                onEdit={(id) => openDetailForm('object', 'edit', id)}
+                                onDelete={deleteObject}
+                                renderItem={(o) => `${o.name} (${o.type})`}
+                            />
+                        </TabsContent>
 
-                    {/* Objects Section */}
-                    <DetailSection
-                        title="Objects"
-                        items={getObjectsByItemId(selectedItemId)}
-                        onAdd={() => openDetailForm('object', 'create')}
-                        onDelete={deleteObject}
-                        renderItem={(o) => `${o.name} (${o.type})`}
-                    />
+                        <TabsContent value="effect" className="mt-0">
+                            <DetailSection
+                                title=""
+                                items={getEffectsByItemId(selectedItemId)}
+                                onAdd={() => openDetailForm('effect', 'create')}
+                                onImport={() => openImportDialog('effect')}
+                                onEdit={(id) => openDetailForm('effect', 'edit', id)}
+                                onDelete={deleteEffect}
+                                renderItem={(e: any) => `useEffect(${e.dependencies})`}
+                            />
+                        </TabsContent>
+                    </Tabs>
                 </div>
             </div>
         </div>
@@ -193,34 +233,51 @@ function InfoItem({ label, value }: InfoItemProps) {
     );
 }
 
-interface DetailSectionProps<T extends { id: string; name: string; description?: string }> {
+interface DetailSectionProps<T extends { id: string; name?: string; description?: string; isImported?: boolean; sourceItemId?: string }> {
     title: string;
     items: T[];
     onAdd: () => void;
+    onImport: () => void;
     onDelete: (id: string) => void;
+    onEdit: (id: string) => void;
     renderItem: (item: T) => string;
 }
 
-function DetailSection<T extends { id: string; name: string; description?: string }>({
+function DetailSection<T extends { id: string; name?: string; description?: string; isImported?: boolean; sourceItemId?: string }>({
     title,
     items,
     onAdd,
+    onImport,
     onDelete,
+    onEdit,
     renderItem,
 }: DetailSectionProps<T>) {
+    const { getItemById } = useItemStore();
+
     return (
         <section>
             <div className="flex items-center justify-between mb-3">
-                <h2 className="text-sm font-semibold">{title}</h2>
-                <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={onAdd}
-                    className="h-6 text-xs px-2"
-                >
-                    <Plus className="h-3 w-3 mr-1" />
-                    Add
-                </Button>
+                {title ? <h2 className="text-sm font-semibold">{title}</h2> : <div></div>}
+                <div className="flex gap-1">
+                    <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={onImport}
+                        className="h-6 text-xs px-2"
+                    >
+                        <Download className="h-3 w-3 mr-1" />
+                        Import
+                    </Button>
+                    <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={onAdd}
+                        className="h-6 text-xs px-2"
+                    >
+                        <Plus className="h-3 w-3 mr-1" />
+                        Add
+                    </Button>
+                </div>
             </div>
             {items.length === 0 ? (
                 <div className="text-xs text-muted-foreground text-center py-4 bg-muted/20 rounded-md">
@@ -228,33 +285,50 @@ function DetailSection<T extends { id: string; name: string; description?: strin
                 </div>
             ) : (
                 <div className="space-y-1">
-                    {items.map((item) => (
-                        <div
-                            key={item.id}
-                            className="flex items-center justify-between p-2 bg-muted/20 rounded-md hover:bg-muted/30 transition-colors"
-                        >
-                            <div className="flex-1">
-                                <div className="text-xs font-medium">{renderItem(item)}</div>
-                                {item.description && (
-                                    <div className="text-[10px] text-muted-foreground mt-0.5">
-                                        {item.description}
-                                    </div>
-                                )}
-                            </div>
-                            <Button
-                                size="sm"
-                                variant="ghost"
-                                onClick={() => {
-                                    if (confirm('Are you sure you want to delete this?')) {
-                                        onDelete(item.id);
-                                    }
-                                }}
-                                className="h-6 w-6 p-0 ml-2"
+                    {items.map((item) => {
+                        const sourceItem = item.isImported && item.sourceItemId ? getItemById(item.sourceItemId) : null;
+
+                        return (
+                            <div
+                                key={item.id}
+                                className={`flex items-center justify-between p-2 rounded-md transition-colors cursor-pointer ${item.isImported
+                                    ? 'bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 border border-blue-200 dark:border-blue-800'
+                                    : 'bg-muted/20 hover:bg-muted/30'
+                                    }`}
+                                onClick={() => onEdit(item.id)}
                             >
-                                <Trash2 className="h-3 w-3 text-destructive" />
-                            </Button>
-                        </div>
-                    ))}
+                                <div className="flex-1">
+                                    <div className="flex items-center gap-2">
+                                        <div className="text-xs font-medium">{renderItem(item)}</div>
+                                        {item.isImported && (
+                                            <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border-blue-300 dark:border-blue-700">
+                                                <Download className="h-2 w-2 mr-0.5" />
+                                                {sourceItem ? sourceItem.title : 'Imported'}
+                                            </Badge>
+                                        )}
+                                    </div>
+                                    {item.description && (
+                                        <div className="text-[10px] text-muted-foreground mt-0.5">
+                                            {item.description}
+                                        </div>
+                                    )}
+                                </div>
+                                <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        if (confirm('Are you sure you want to delete this?')) {
+                                            onDelete(item.id);
+                                        }
+                                    }}
+                                    className="h-6 w-6 p-0 ml-2"
+                                >
+                                    <Trash2 className="h-3 w-3 text-destructive" />
+                                </Button>
+                            </div>
+                        );
+                    })}
                 </div>
             )}
         </section>

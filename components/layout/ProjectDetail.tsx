@@ -84,7 +84,7 @@ export function ProjectDetail() {
 
             {/* 기존 프로젝트 관리 화면 */}
             <div className="flex-1 overflow-hidden">
-                <SidebarProvider defaultOpen={false} className="h-full overflow-hidden">
+                <SidebarProvider defaultOpen={false} className="h-full min-h-0 overflow-hidden">
                     <AppSidebar />
                     <SidebarInset className="flex-1 overflow-hidden">
                         <ResizablePanelGroup direction="horizontal" className="h-full items-stretch">

@@ -11,6 +11,7 @@ import {
 import { VariableForm } from "@/components/forms/VariableForm";
 import { FunctionForm } from "@/components/forms/FunctionForm";
 import { ObjectForm } from "@/components/forms/ObjectForm";
+import { EffectForm } from "@/components/forms/EffectForm";
 import { v4 as uuidv4 } from 'uuid';
 
 export function DetailFormContainer() {
@@ -19,6 +20,7 @@ export function DetailFormContainer() {
         detailFormType,
         detailFormMode,
         selectedItemId,
+        selectedDetailId,
         closeDetailForm
     } = useUiStore();
 
@@ -29,6 +31,12 @@ export function DetailFormContainer() {
         updateVariable,
         updateFunction,
         updateObject,
+        updateEffect,
+        getVariableById,
+        getFunctionById,
+        getObjectById,
+        getEffectById,
+        addEffect,
     } = useDetailStore();
 
     if (!selectedItemId || !detailFormType) return null;
@@ -43,9 +51,8 @@ export function DetailFormContainer() {
                 createdAt: now,
                 updatedAt: now,
             });
-        } else {
-            // 수정 로직은 나중에 구현
-            updateVariable(data.id, { ...data, updatedAt: now });
+        } else if (selectedDetailId) {
+            updateVariable(selectedDetailId, { ...data, updatedAt: now });
         }
         closeDetailForm();
     };
@@ -60,8 +67,8 @@ export function DetailFormContainer() {
                 createdAt: now,
                 updatedAt: now,
             });
-        } else {
-            updateFunction(data.id, { ...data, updatedAt: now });
+        } else if (selectedDetailId) {
+            updateFunction(selectedDetailId, { ...data, updatedAt: now });
         }
         closeDetailForm();
     };
@@ -76,8 +83,24 @@ export function DetailFormContainer() {
                 createdAt: now,
                 updatedAt: now,
             });
-        } else {
-            updateObject(data.id, { ...data, updatedAt: now });
+        } else if (selectedDetailId) {
+            updateObject(selectedDetailId, { ...data, updatedAt: now });
+        }
+        closeDetailForm();
+    };
+
+    const handleEffectSubmit = (data: any) => {
+        const now = new Date();
+        if (detailFormMode === 'create') {
+            addEffect({
+                id: uuidv4(),
+                itemId: selectedItemId,
+                ...data,
+                createdAt: now,
+                updatedAt: now,
+            });
+        } else if (selectedDetailId) {
+            updateEffect(selectedDetailId, { ...data, updatedAt: now });
         }
         closeDetailForm();
     };
@@ -91,6 +114,8 @@ export function DetailFormContainer() {
                 return `함수 ${action}`;
             case 'object':
                 return `객체 ${action}`;
+            case 'effect':
+                return `useEffect ${action}`;
             default:
                 return '';
         }
@@ -98,13 +123,18 @@ export function DetailFormContainer() {
 
     return (
         <Sheet open={isDetailFormOpen} onOpenChange={(open) => !open && closeDetailForm()}>
-            <SheetContent className="sm:max-w-[500px] overflow-y-auto px-6">
+            <SheetContent className="sm:max-w-[500px] overflow-y-auto px-4">
                 <SheetHeader className="mb-6">
                     <SheetTitle className="text-base">{getTitle()}</SheetTitle>
                 </SheetHeader>
 
                 {detailFormType === 'variable' && (
                     <VariableForm
+                        defaultValues={
+                            detailFormMode === 'edit' && selectedDetailId
+                                ? getVariableById(selectedDetailId)
+                                : undefined
+                        }
                         onSubmit={handleVariableSubmit}
                         onCancel={closeDetailForm}
                     />
@@ -112,6 +142,11 @@ export function DetailFormContainer() {
 
                 {detailFormType === 'function' && (
                     <FunctionForm
+                        defaultValues={
+                            detailFormMode === 'edit' && selectedDetailId
+                                ? getFunctionById(selectedDetailId)
+                                : undefined
+                        }
                         onSubmit={handleFunctionSubmit}
                         onCancel={closeDetailForm}
                     />
@@ -119,7 +154,24 @@ export function DetailFormContainer() {
 
                 {detailFormType === 'object' && (
                     <ObjectForm
+                        defaultValues={
+                            detailFormMode === 'edit' && selectedDetailId
+                                ? getObjectById(selectedDetailId)
+                                : undefined
+                        }
                         onSubmit={handleObjectSubmit}
+                        onCancel={closeDetailForm}
+                    />
+                )}
+
+                {detailFormType === 'effect' && (
+                    <EffectForm
+                        defaultValues={
+                            detailFormMode === 'edit' && selectedDetailId
+                                ? getEffectById(selectedDetailId)
+                                : undefined
+                        }
+                        onSubmit={handleEffectSubmit}
                         onCancel={closeDetailForm}
                     />
                 )}

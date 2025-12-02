@@ -21,7 +21,7 @@ export function ShareFormContainer() {
 
     return (
         <Sheet open={isShareFormOpen} onOpenChange={(open) => !open && closeShareForm()}>
-            <SheetContent className="sm:max-w-[500px] px-6">
+            <SheetContent className="sm:max-w-[500px] px-4">
                 <SheetHeader className="mb-6">
                     <SheetTitle>Share Project</SheetTitle>
                 </SheetHeader>

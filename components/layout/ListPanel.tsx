@@ -3,7 +3,7 @@
 import { useUiStore } from '@/store/uiStore';
 import { useItemStore } from '@/store/itemStore';
 import { getCategoryInfo } from '@/lib/constants';
-import { ScrollArea } from '@/components/ui/scroll-area';
+
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -69,7 +69,7 @@ export function ListPanel() {
             </div>
 
             {/* 아이템 목록 */}
-            <ScrollArea className="flex-1">
+            <div className="flex-1 overflow-y-auto min-h-0">
                 {items.length === 0 ? (
                     <div className="p-8 text-center">
                         <FileText className="h-12 w-12 mx-auto mb-3 text-muted-foreground/40" />
@@ -87,7 +87,7 @@ export function ListPanel() {
                         ))}
                     </div>
                 )}
-            </ScrollArea>
+            </div>
         </div>
     );
 }
@@ -112,13 +112,18 @@ function ItemCard({ item, isSelected, onClick }: ItemCardProps) {
             )}
         >
             {/* 카테고리 뱃지 */}
-            <div className="flex items-center gap-1 mb-1">
+            <div className="flex items-center gap-1 mb-1 flex-wrap">
                 <Badge
                     variant="secondary"
                     className="text-[10px] px-1 py-0 h-4 font-normal"
                 >
                     {categoryInfo.icon} <span className="ml-1">{categoryInfo.name}</span>
                 </Badge>
+                {item.tags && item.tags.map((tag) => (
+                    <Badge key={tag} variant="outline" className="text-[10px] px-1 py-0 h-4 font-normal">
+                        {tag}
+                    </Badge>
+                ))}
             </div>
 
             {/* 제목 */}

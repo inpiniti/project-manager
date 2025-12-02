@@ -10,6 +10,7 @@ import { DetailFormContainer } from "@/components/layout/DetailFormContainer";
 import { ProjectFormContainer } from "@/components/layout/ProjectFormContainer";
 import { ShareFormContainer } from "@/components/layout/ShareFormContainer";
 import { LoginPage } from "@/components/auth/LoginPage";
+import { ImportResourceSheet } from "@/components/layout/ImportResourceSheet";
 
 export default function Home() {
   const { currentView } = useUiStore();
@@ -36,6 +37,7 @@ export default function Home() {
       <DetailFormContainer />
       <ProjectFormContainer />
       <ShareFormContainer />
+      <ImportResourceSheet />
     </>
   );
 }

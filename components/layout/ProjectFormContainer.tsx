@@ -30,7 +30,7 @@ export function ProjectFormContainer() {
 
     return (
         <Sheet open={isProjectFormOpen} onOpenChange={(open) => !open && closeProjectForm()}>
-            <SheetContent className="sm:max-w-[500px] px-6">
+            <SheetContent className="sm:max-w-[500px] px-4">
                 <SheetHeader className="mb-6">
                     <SheetTitle>Create New Project</SheetTitle>
                 </SheetHeader>

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { CategoryType } from '@/lib/types';
 
-type DetailFormType = 'variable' | 'function' | 'object' | null;
+type DetailFormType = 'variable' | 'function' | 'object' | 'effect' | null;
 type ViewType = 'projectList' | 'projectDetail' | 'login';
 
 interface UiStore {
@@ -27,6 +27,10 @@ interface UiStore {
     detailFormMode: 'create' | 'edit';
     selectedDetailId: string | null; // 수정 시 사용
 
+    // Import 다이얼로그 상태
+    isImportDialogOpen: boolean;
+    importResourceType: DetailFormType; // 어떤 타입의 리소스를 import할지
+
     // 프로젝트 폼 상태
     isProjectFormOpen: boolean;
 
@@ -48,6 +52,10 @@ interface UiStore {
     // 상세 정보 폼 액션
     openDetailForm: (type: DetailFormType, mode: 'create' | 'edit', detailId?: string) => void;
     closeDetailForm: () => void;
+
+    // Import 다이얼로그 액션
+    openImportDialog: (type: DetailFormType) => void;
+    closeImportDialog: () => void;
 
     // 프로젝트 폼 액션
     openProjectForm: () => void;
@@ -73,6 +81,9 @@ export const useUiStore = create<UiStore>((set) => ({
     detailFormType: null,
     detailFormMode: 'create',
     selectedDetailId: null,
+
+    isImportDialogOpen: false,
+    importResourceType: null,
 
     isProjectFormOpen: false,
 
@@ -109,6 +120,12 @@ export const useUiStore = create<UiStore>((set) => ({
 
     closeDetailForm: () =>
         set({ isDetailFormOpen: false, detailFormType: null, selectedDetailId: null }),
+
+    openImportDialog: (type) =>
+        set({ isImportDialogOpen: true, importResourceType: type }),
+
+    closeImportDialog: () =>
+        set({ isImportDialogOpen: false, importResourceType: null }),
 
     openProjectForm: () =>
         set({ isProjectFormOpen: true }),

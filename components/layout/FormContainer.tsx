@@ -63,7 +63,7 @@ export function FormContainer() {
 
     return (
         <Sheet open={isFormOpen} onOpenChange={(open) => !open && closeForm()}>
-            <SheetContent className="sm:max-w-[600px] overflow-y-auto px-6">
+            <SheetContent className="sm:max-w-[600px] overflow-y-auto px-4">
                 <SheetHeader className="mb-6">
                     <SheetTitle>
                         {formMode === 'create' ? 'Add New Item' : 'Edit Item'}

@@ -81,6 +81,9 @@ export interface Variable {
   type: string; // 데이터 타입 (string, number, boolean 등)
   defaultValue?: string;
   description?: string;
+  isImported?: boolean; // 다른 아이템에서 import한 것인지
+  sourceItemId?: string; // import한 경우 원본 아이템 ID
+  sourceId?: string; // import한 경우 원본 리소스 ID
   createdAt: Date;
   updatedAt: Date;
 }
@@ -93,6 +96,9 @@ export interface FunctionItem {
   returnType: string;
   parameters?: string; // 파라미터 설명 (간단하게 문자열로)
   description?: string;
+  isImported?: boolean; // 다른 아이템에서 import한 것인지
+  sourceItemId?: string; // import한 경우 원본 아이템 ID
+  sourceId?: string; // import한 경우 원본 리소스 ID
   createdAt: Date;
   updatedAt: Date;
 }
@@ -105,6 +111,23 @@ export interface ObjectItem {
   type: string; // 객체 타입 (class, interface, type 등)
   properties?: string; // 속성 설명
   description?: string;
+  isImported?: boolean; // 다른 아이템에서 import한 것인지
+  sourceItemId?: string; // import한 경우 원본 아이템 ID
+  sourceId?: string; // import한 경우 원본 리소스 ID
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// useEffect
+export interface EffectItem {
+  id: string;
+  itemId: string;
+  dependencies: string; // 의존성 배열 (예: "[userId, data]")
+  code: string; // useEffect 내부 코드
+  description?: string;
+  isImported?: boolean; // 다른 아이템에서 import한 것인지
+  sourceItemId?: string; // import한 경우 원본 아이템 ID
+  sourceId?: string; // import한 경우 원본 리소스 ID
   createdAt: Date;
   updatedAt: Date;
 }
