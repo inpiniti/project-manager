@@ -3,6 +3,7 @@
 import { useProjectStore } from '@/store/projectStore';
 import { useUiStore } from '@/store/uiStore';
 import { useItemStore } from '@/store/itemStore';
+import { useDetailStore } from '@/store/detailStore';
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { ListPanel } from "@/components/layout/ListPanel";
 import { MainContent } from "@/components/layout/MainContent";
@@ -21,14 +22,16 @@ export function ProjectDetail() {
     const { currentProjectId, setCurrentView, setCurrentProjectId } = useUiStore();
     const { getProjectById } = useProjectStore();
     const { fetchItems } = useItemStore();
+    const { fetchProjectResources } = useDetailStore();
 
     const project = currentProjectId ? getProjectById(currentProjectId) : null;
 
     useEffect(() => {
         if (currentProjectId) {
             fetchItems(currentProjectId);
+            fetchProjectResources(currentProjectId);
         }
-    }, [currentProjectId, fetchItems]);
+    }, [currentProjectId, fetchItems, fetchProjectResources]);
 
     if (!currentProjectId) {
         return null;
