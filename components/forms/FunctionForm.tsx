@@ -14,12 +14,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const functionSchema = z.object({
     name: z.string().min(1, "함수명을 입력해주세요"),
     returnType: z.string().min(1, "반환 타입을 입력해주세요"),
     parameters: z.string().optional(),
     description: z.string().optional(),
+    isReturn: z.boolean().default(false),
 });
 
 type FunctionFormValues = z.infer<typeof functionSchema>;
@@ -38,6 +40,7 @@ export function FunctionForm({ defaultValues, onSubmit, onCancel }: FunctionForm
             returnType: defaultValues?.returnType || "",
             parameters: defaultValues?.parameters || "",
             description: defaultValues?.description || "",
+            isReturn: defaultValues?.isReturn || false,
         },
     });
 
@@ -87,6 +90,26 @@ export function FunctionForm({ defaultValues, onSubmit, onCancel }: FunctionForm
                                     />
                                 </FormControl>
                                 <FormMessage className="text-[10px]" />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="isReturn"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-2 space-y-0 rounded-md border p-2 mb-3">
+                                <FormControl>
+                                    <Checkbox
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                    <FormLabel className="text-xs">
+                                        Return 포함
+                                    </FormLabel>
+                                </div>
                             </FormItem>
                         )}
                     />

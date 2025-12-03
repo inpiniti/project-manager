@@ -14,12 +14,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const variableSchema = z.object({
     name: z.string().min(1, "변수명을 입력해주세요"),
     type: z.string().min(1, "타입을 입력해주세요"),
     defaultValue: z.string().optional(),
     description: z.string().optional(),
+    isReturn: z.boolean().default(false),
 });
 
 type VariableFormValues = z.infer<typeof variableSchema>;
@@ -38,6 +40,7 @@ export function VariableForm({ defaultValues, onSubmit, onCancel }: VariableForm
             type: defaultValues?.type || "",
             defaultValue: defaultValues?.defaultValue || "",
             description: defaultValues?.description || "",
+            isReturn: defaultValues?.isReturn || false,
         },
     });
 
@@ -83,6 +86,26 @@ export function VariableForm({ defaultValues, onSubmit, onCancel }: VariableForm
                                     <Input className="h-8 text-xs" placeholder="''" {...field} />
                                 </FormControl>
                                 <FormMessage className="text-[10px]" />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="isReturn"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-2 space-y-0 rounded-md border p-2 mb-3">
+                                <FormControl>
+                                    <Checkbox
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                    <FormLabel className="text-xs">
+                                        Return 포함
+                                    </FormLabel>
+                                </div>
                             </FormItem>
                         )}
                     />

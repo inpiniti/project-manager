@@ -61,13 +61,13 @@ export function ImportResourceSheet() {
         let resources: any[] = [];
         switch (importResourceType) {
             case 'variable':
-                resources = getAllVariables();
+                resources = getAllVariables().filter(r => r.isReturn);
                 break;
             case 'function':
-                resources = getAllFunctions();
+                resources = getAllFunctions().filter(r => r.isReturn);
                 break;
             case 'object':
-                resources = getAllObjects();
+                resources = getAllObjects().filter(r => r.isReturn);
                 break;
             case 'effect':
                 resources = getAllEffects();

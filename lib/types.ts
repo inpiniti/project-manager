@@ -82,6 +82,7 @@ export interface Variable {
   defaultValue?: string;
   description?: string;
   isImported?: boolean; // 다른 아이템에서 import한 것인지
+  isReturn?: boolean; // return 문에 포함되는지 여부
   sourceItemId?: string; // import한 경우 원본 아이템 ID
   sourceId?: string; // import한 경우 원본 리소스 ID
   createdAt: Date;
@@ -97,6 +98,7 @@ export interface FunctionItem {
   parameters?: string; // 파라미터 설명 (간단하게 문자열로)
   description?: string;
   isImported?: boolean; // 다른 아이템에서 import한 것인지
+  isReturn?: boolean; // return 문에 포함되는지 여부
   sourceItemId?: string; // import한 경우 원본 아이템 ID
   sourceId?: string; // import한 경우 원본 리소스 ID
   createdAt: Date;
@@ -112,6 +114,7 @@ export interface ObjectItem {
   properties?: string; // 속성 설명
   description?: string;
   isImported?: boolean; // 다른 아이템에서 import한 것인지
+  isReturn?: boolean; // return 문에 포함되는지 여부
   sourceItemId?: string; // import한 경우 원본 아이템 ID
   sourceId?: string; // import한 경우 원본 리소스 ID
   createdAt: Date;

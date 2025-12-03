@@ -233,7 +233,7 @@ function InfoItem({ label, value }: InfoItemProps) {
     );
 }
 
-interface DetailSectionProps<T extends { id: string; name?: string; description?: string; isImported?: boolean; sourceItemId?: string }> {
+interface DetailSectionProps<T extends { id: string; name?: string; description?: string; isImported?: boolean; isReturn?: boolean; sourceItemId?: string }> {
     title: string;
     items: T[];
     onAdd: () => void;
@@ -243,7 +243,7 @@ interface DetailSectionProps<T extends { id: string; name?: string; description?
     renderItem: (item: T) => string;
 }
 
-function DetailSection<T extends { id: string; name?: string; description?: string; isImported?: boolean; sourceItemId?: string }>({
+function DetailSection<T extends { id: string; name?: string; description?: string; isImported?: boolean; isReturn?: boolean; sourceItemId?: string }>({
     title,
     items,
     onAdd,
@@ -300,6 +300,11 @@ function DetailSection<T extends { id: string; name?: string; description?: stri
                                 <div className="flex-1">
                                     <div className="flex items-center gap-2">
                                         <div className="text-xs font-medium">{renderItem(item)}</div>
+                                        {item.isReturn && (
+                                            <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-300 dark:border-green-700">
+                                                Return
+                                            </Badge>
+                                        )}
                                         {item.isImported && (
                                             <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border-blue-300 dark:border-blue-700">
                                                 <Download className="h-2 w-2 mr-0.5" />
