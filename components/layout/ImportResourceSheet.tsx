@@ -79,11 +79,17 @@ export function ImportResourceSheet() {
 
         // 검색 필터
         if (searchQuery) {
-            resources = resources.filter(r =>
-                (r.name && r.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-                (r.code && r.code.toLowerCase().includes(searchQuery.toLowerCase())) ||
-                r.description?.toLowerCase().includes(searchQuery.toLowerCase())
-            );
+            resources = resources.filter(r => {
+                const item = getItemById(r.itemId);
+                const itemTitleMatch = item?.title?.toLowerCase().includes(searchQuery.toLowerCase());
+
+                return (
+                    (r.name && r.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                    (r.code && r.code.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                    r.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    itemTitleMatch
+                );
+            });
         }
 
         return resources;
