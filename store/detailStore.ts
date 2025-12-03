@@ -101,9 +101,13 @@ export const useDetailStore = create<DetailStore>((set, get) => ({
     },
 
     updateVariable: async (id, updatedVariable) => {
+        const currentVariable = get().getVariableById(id);
+        if (!currentVariable) return;
+
+        // 1. Update the specific variable (including isReturn)
         const { error } = await supabase
             .from('variables')
-            .update(mapVariableToDb({ ...get().getVariableById(id)!, ...updatedVariable }))
+            .update(mapVariableToDb({ ...currentVariable, ...updatedVariable }))
             .eq('id', id);
 
         if (error) {
@@ -111,10 +115,47 @@ export const useDetailStore = create<DetailStore>((set, get) => ({
             return;
         }
 
+        // 2. Propagate changes to related variables (excluding isReturn)
+        const rootSourceId = currentVariable.isImported && currentVariable.sourceId
+            ? currentVariable.sourceId
+            : id;
+
+        const sharedUpdates = {
+            name: updatedVariable.name,
+            type: updatedVariable.type,
+            default_value: updatedVariable.defaultValue,
+            description: updatedVariable.description,
+            updated_at: new Date().toISOString(),
+        };
+
+        const { error: syncError } = await supabase
+            .from('variables')
+            .update(sharedUpdates)
+            .or(`id.eq.${rootSourceId},source_id.eq.${rootSourceId}`)
+            .neq('id', id);
+
+        if (syncError) {
+            console.error('Error syncing related variables:', syncError);
+        }
+
+        // 3. Update local state
         set((state) => ({
-            variables: state.variables.map((v) =>
-                v.id === id ? { ...v, ...updatedVariable } : v
-            ),
+            variables: state.variables.map((v) => {
+                if (v.id === id) {
+                    return { ...v, ...updatedVariable };
+                }
+                const isRelated = v.id === rootSourceId || v.sourceId === rootSourceId;
+                if (isRelated) {
+                    return {
+                        ...v,
+                        name: updatedVariable.name ?? v.name,
+                        type: updatedVariable.type ?? v.type,
+                        defaultValue: updatedVariable.defaultValue ?? v.defaultValue,
+                        description: updatedVariable.description ?? v.description,
+                    };
+                }
+                return v;
+            }),
         }));
     },
 
@@ -201,9 +242,13 @@ export const useDetailStore = create<DetailStore>((set, get) => ({
     },
 
     updateFunction: async (id, updatedFunction) => {
+        const currentFunction = get().getFunctionById(id);
+        if (!currentFunction) return;
+
+        // 1. Update the specific function (including isReturn)
         const { error } = await supabase
             .from('functions')
-            .update(mapFunctionToDb({ ...get().getFunctionById(id)!, ...updatedFunction }))
+            .update(mapFunctionToDb({ ...currentFunction, ...updatedFunction }))
             .eq('id', id);
 
         if (error) {
@@ -211,10 +256,47 @@ export const useDetailStore = create<DetailStore>((set, get) => ({
             return;
         }
 
+        // 2. Propagate changes to related functions (excluding isReturn)
+        const rootSourceId = currentFunction.isImported && currentFunction.sourceId
+            ? currentFunction.sourceId
+            : id;
+
+        const sharedUpdates = {
+            name: updatedFunction.name,
+            return_type: updatedFunction.returnType,
+            parameters: updatedFunction.parameters,
+            description: updatedFunction.description,
+            updated_at: new Date().toISOString(),
+        };
+
+        const { error: syncError } = await supabase
+            .from('functions')
+            .update(sharedUpdates)
+            .or(`id.eq.${rootSourceId},source_id.eq.${rootSourceId}`)
+            .neq('id', id);
+
+        if (syncError) {
+            console.error('Error syncing related functions:', syncError);
+        }
+
+        // 3. Update local state
         set((state) => ({
-            functions: state.functions.map((f) =>
-                f.id === id ? { ...f, ...updatedFunction } : f
-            ),
+            functions: state.functions.map((f) => {
+                if (f.id === id) {
+                    return { ...f, ...updatedFunction };
+                }
+                const isRelated = f.id === rootSourceId || f.sourceId === rootSourceId;
+                if (isRelated) {
+                    return {
+                        ...f,
+                        name: updatedFunction.name ?? f.name,
+                        returnType: updatedFunction.returnType ?? f.returnType,
+                        parameters: updatedFunction.parameters ?? f.parameters,
+                        description: updatedFunction.description ?? f.description,
+                    };
+                }
+                return f;
+            }),
         }));
     },
 
@@ -292,9 +374,13 @@ export const useDetailStore = create<DetailStore>((set, get) => ({
     },
 
     updateObject: async (id, updatedObject) => {
+        const currentObject = get().getObjectById(id);
+        if (!currentObject) return;
+
+        // 1. Update the specific object (including isReturn)
         const { error } = await supabase
             .from('objects')
-            .update(mapObjectToDb({ ...get().getObjectById(id)!, ...updatedObject }))
+            .update(mapObjectToDb({ ...currentObject, ...updatedObject }))
             .eq('id', id);
 
         if (error) {
@@ -302,10 +388,47 @@ export const useDetailStore = create<DetailStore>((set, get) => ({
             return;
         }
 
+        // 2. Propagate changes to related objects (excluding isReturn)
+        const rootSourceId = currentObject.isImported && currentObject.sourceId
+            ? currentObject.sourceId
+            : id;
+
+        const sharedUpdates = {
+            name: updatedObject.name,
+            type: updatedObject.type,
+            properties: updatedObject.properties,
+            description: updatedObject.description,
+            updated_at: new Date().toISOString(),
+        };
+
+        const { error: syncError } = await supabase
+            .from('objects')
+            .update(sharedUpdates)
+            .or(`id.eq.${rootSourceId},source_id.eq.${rootSourceId}`)
+            .neq('id', id);
+
+        if (syncError) {
+            console.error('Error syncing related objects:', syncError);
+        }
+
+        // 3. Update local state
         set((state) => ({
-            objects: state.objects.map((o) =>
-                o.id === id ? { ...o, ...updatedObject } : o
-            ),
+            objects: state.objects.map((o) => {
+                if (o.id === id) {
+                    return { ...o, ...updatedObject };
+                }
+                const isRelated = o.id === rootSourceId || o.sourceId === rootSourceId;
+                if (isRelated) {
+                    return {
+                        ...o,
+                        name: updatedObject.name ?? o.name,
+                        type: updatedObject.type ?? o.type,
+                        properties: updatedObject.properties ?? o.properties,
+                        description: updatedObject.description ?? o.description,
+                    };
+                }
+                return o;
+            }),
         }));
     },
 
