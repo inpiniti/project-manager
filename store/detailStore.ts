@@ -61,26 +61,26 @@ export const useDetailStore = create<DetailStore>((set, get) => ({
         // Variables
         const { data: variables } = await supabase
             .from('variables')
-            .select('*, project_items!inner(project_id)')
-            .eq('project_items.project_id', projectId);
+            .select('*, items!inner(project_id)')
+            .eq('items.project_id', projectId);
 
         // Functions
         const { data: functions } = await supabase
             .from('functions')
-            .select('*, project_items!inner(project_id)')
-            .eq('project_items.project_id', projectId);
+            .select('*, items!inner(project_id)')
+            .eq('items.project_id', projectId);
 
         // Objects
         const { data: objects } = await supabase
             .from('objects')
-            .select('*, project_items!inner(project_id)')
-            .eq('project_items.project_id', projectId);
+            .select('*, items!inner(project_id)')
+            .eq('items.project_id', projectId);
 
         // Effects
         const { data: effects } = await supabase
             .from('effects')
-            .select('*, project_items!inner(project_id)')
-            .eq('project_items.project_id', projectId);
+            .select('*, items!inner(project_id)')
+            .eq('items.project_id', projectId);
 
         set({
             variables: (variables || []).map(mapVariableFromDb),

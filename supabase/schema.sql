@@ -1,7 +1,7 @@
 -- Variables Table
 CREATE TABLE IF NOT EXISTS variables (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  item_id UUID NOT NULL REFERENCES project_items(id) ON DELETE CASCADE,
+  item_id UUID NOT NULL REFERENCES items(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   type TEXT NOT NULL,
   default_value TEXT,
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS variables (
 -- Functions Table
 CREATE TABLE IF NOT EXISTS functions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  item_id UUID NOT NULL REFERENCES project_items(id) ON DELETE CASCADE,
+  item_id UUID NOT NULL REFERENCES items(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   return_type TEXT NOT NULL,
   parameters TEXT,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS functions (
 -- Objects Table
 CREATE TABLE IF NOT EXISTS objects (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  item_id UUID NOT NULL REFERENCES project_items(id) ON DELETE CASCADE,
+  item_id UUID NOT NULL REFERENCES items(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   type TEXT NOT NULL,
   properties TEXT,
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS objects (
 -- Effects Table
 CREATE TABLE IF NOT EXISTS effects (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  item_id UUID NOT NULL REFERENCES project_items(id) ON DELETE CASCADE,
+  item_id UUID NOT NULL REFERENCES items(id) ON DELETE CASCADE,
   dependencies TEXT NOT NULL,
   code TEXT NOT NULL,
   description TEXT,
