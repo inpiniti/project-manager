@@ -21,7 +21,7 @@ const variableSchema = z.object({
     type: z.string().min(1, "타입을 입력해주세요"),
     defaultValue: z.string().optional(),
     description: z.string().optional(),
-    isReturn: z.boolean().default(false),
+    isReturn: z.boolean(),
 });
 
 type VariableFormValues = z.infer<typeof variableSchema>;
@@ -36,11 +36,11 @@ export function VariableForm({ defaultValues, onSubmit, onCancel }: VariableForm
     const form = useForm<VariableFormValues>({
         resolver: zodResolver(variableSchema),
         defaultValues: {
-            name: defaultValues?.name || "",
-            type: defaultValues?.type || "",
-            defaultValue: defaultValues?.defaultValue || "",
-            description: defaultValues?.description || "",
-            isReturn: defaultValues?.isReturn || false,
+            name: defaultValues?.name ?? "",
+            type: defaultValues?.type ?? "",
+            defaultValue: defaultValues?.defaultValue ?? "",
+            description: defaultValues?.description ?? "",
+            isReturn: defaultValues?.isReturn ?? false,
         },
     });
 

@@ -21,7 +21,7 @@ const functionSchema = z.object({
     returnType: z.string().min(1, "반환 타입을 입력해주세요"),
     parameters: z.string().optional(),
     description: z.string().optional(),
-    isReturn: z.boolean().default(false),
+    isReturn: z.boolean(),
 });
 
 type FunctionFormValues = z.infer<typeof functionSchema>;
@@ -36,11 +36,11 @@ export function FunctionForm({ defaultValues, onSubmit, onCancel }: FunctionForm
     const form = useForm<FunctionFormValues>({
         resolver: zodResolver(functionSchema),
         defaultValues: {
-            name: defaultValues?.name || "",
-            returnType: defaultValues?.returnType || "",
-            parameters: defaultValues?.parameters || "",
-            description: defaultValues?.description || "",
-            isReturn: defaultValues?.isReturn || false,
+            name: defaultValues?.name ?? "",
+            returnType: defaultValues?.returnType ?? "",
+            parameters: defaultValues?.parameters ?? "",
+            description: defaultValues?.description ?? "",
+            isReturn: defaultValues?.isReturn ?? false,
         },
     });
 

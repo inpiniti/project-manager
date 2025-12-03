@@ -21,7 +21,7 @@ const objectSchema = z.object({
     type: z.string().min(1, "타입을 입력해주세요"),
     properties: z.string().optional(),
     description: z.string().optional(),
-    isReturn: z.boolean().default(false),
+    isReturn: z.boolean(),
 });
 
 type ObjectFormValues = z.infer<typeof objectSchema>;
@@ -36,11 +36,11 @@ export function ObjectForm({ defaultValues, onSubmit, onCancel }: ObjectFormProp
     const form = useForm<ObjectFormValues>({
         resolver: zodResolver(objectSchema),
         defaultValues: {
-            name: defaultValues?.name || "",
-            type: defaultValues?.type || "",
-            properties: defaultValues?.properties || "",
-            description: defaultValues?.description || "",
-            isReturn: defaultValues?.isReturn || false,
+            name: defaultValues?.name ?? "",
+            type: defaultValues?.type ?? "",
+            properties: defaultValues?.properties ?? "",
+            description: defaultValues?.description ?? "",
+            isReturn: defaultValues?.isReturn ?? false,
         },
     });
 
