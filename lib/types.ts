@@ -134,3 +134,35 @@ export interface EffectItem {
   createdAt: Date;
   updatedAt: Date;
 }
+
+// 프로필
+export interface Profile {
+  id: string;
+  email: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// 게시글
+export interface Post {
+  id: string;
+  title: string;
+  content: string;
+  authorId: string;
+  authorName?: string; // profiles 테이블과 join 시 사용
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// 댓글
+export interface Comment {
+  id: string;
+  postId: string;
+  content: string;
+  authorId: string;
+  authorName?: string; // profiles 테이블과 join 시 사용
+  createdAt: Date;
+  updatedAt: Date;
+}
+

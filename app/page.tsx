@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useUiStore } from "@/store/uiStore";
 import { useAuthStore } from "@/store/authStore";
+import { usePostStore } from "@/store/postStore";
 import { ProjectList } from "@/components/layout/ProjectList";
 import { ProjectDetail } from "@/components/layout/ProjectDetail";
 import { FormContainer } from "@/components/layout/FormContainer";
@@ -11,10 +12,13 @@ import { ProjectFormContainer } from "@/components/layout/ProjectFormContainer";
 import { ShareFormContainer } from "@/components/layout/ShareFormContainer";
 import { LoginPage } from "@/components/auth/LoginPage";
 import { ImportResourceSheet } from "@/components/layout/ImportResourceSheet";
+import { PostList } from "@/components/posts/PostList";
+import { PostDetail } from "@/components/posts/PostDetail";
 
 export default function Home() {
   const { currentView } = useUiStore();
   const { isAuthenticated, isLoading, checkSession } = useAuthStore();
+  const { currentPost } = usePostStore();
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
@@ -31,6 +35,7 @@ export default function Home() {
       {currentView === 'login' && <LoginPage />}
       {currentView === 'projectList' && <ProjectList />}
       {currentView === 'projectDetail' && <ProjectDetail />}
+      {currentView === 'posts' && (currentPost ? <PostDetail /> : <PostList />)}
 
       {/* 전역 폼 컨테이너 */}
       <FormContainer />
@@ -41,3 +46,4 @@ export default function Home() {
     </>
   );
 }
+

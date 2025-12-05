@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { CategoryType } from '@/lib/types';
 
 type DetailFormType = 'variable' | 'function' | 'object' | 'effect' | null;
-type ViewType = 'projectList' | 'projectDetail' | 'login';
+type ViewType = 'projectList' | 'projectDetail' | 'login' | 'posts';
 
 interface UiStore {
     // 현재 뷰

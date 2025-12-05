@@ -4,7 +4,7 @@ import { useProjectStore } from '@/store/projectStore';
 import { useUiStore } from '@/store/uiStore';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
-import { Plus, FolderOpen, Calendar, Trash2, LogOut, Share2 } from 'lucide-react';
+import { Plus, FolderOpen, Calendar, Trash2, LogOut, Share2, MessageSquare } from 'lucide-react';
 import { ModeToggle } from '@/components/ui/mode-toggle';
 import { useEffect } from 'react';
 
@@ -84,6 +84,10 @@ export function ProjectList() {
                     </div>
                     <div className="flex gap-2 items-center">
                         <ModeToggle />
+                        <Button variant="outline" onClick={() => setCurrentView('posts')} className="gap-2">
+                            <MessageSquare className="h-4 w-4" />
+                            문의 게시판
+                        </Button>
                         <Button variant="outline" onClick={logout} className="gap-2">
                             <LogOut className="h-4 w-4" />
                             Log Out
